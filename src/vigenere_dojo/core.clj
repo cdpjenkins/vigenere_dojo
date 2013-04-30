@@ -16,28 +16,22 @@
   (-  (int c) (int \A)))
 
 (defn encode-pair [pt-char key-char]
-  (nth (nth table-whole key-char) pt-char))
+  (nth (nth table-whole (char-to-int key-char))
+       (char-to-int pt-char)))
 
 (defn encrypt [plain-text key-word]
-  (let [pairs (map encode-pair
-                   (map char-to-int plain-text) (map char-to-int (cycle key-word)))]
-
-    (apply str pairs)))
+  (apply str (map encode-pair plain-text (cycle key-word))))
 
 (defn decode-pair [pt-char key-char]
   (let [row (nth table-whole key-char)
         i (.indexOf row pt-char)]
-    (nth table-line i)
-    ;[pt-char key-char row i]
-    ))
+    (nth table-line i)))
 
 
 (defn decrypt [ct k]
-  (let [pairs (map decode-pair
-                   ct (map char-to-int (cycle k)))]
-                                        ;
-    (apply str pairs)))
-
+  (apply str (map decode-pair
+                  ct
+                  (map char-to-int (cycle k)))))
 
 (defn test-1 []
   (let [pt "ATTACKATDAWN"
