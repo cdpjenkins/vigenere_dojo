@@ -26,7 +26,7 @@
 
 (defn decode-pair [pt-char key-char]
   (let [row (nth table-whole key-char)
-        i (.indexOf (map char-to-int row) pt-char)]
+        i (.indexOf row pt-char)]
     (nth table-line i)
     ;[pt-char key-char row i]
     ))
@@ -34,15 +34,16 @@
 
 (defn decrypt [ct k]
   (let [pairs (map decode-pair
-                   (map char-to-int ct) (map char-to-int (cycle k)))]
+                   ct (map char-to-int (cycle k)))]
                                         ;
     (apply str pairs)))
 
 
-(def plain-text "ABCDEFG" )
-(def key "LEMONLEM")
-
-
-
-
-(map vector plain-text key)
+(defn test-1 []
+  (let [pt "ATTACKATDAWN"
+        key "LEMON"
+        ct "LXFOPVEFRNHR"
+        ]
+    (and
+     (= (encrypt pt key) ct)
+     (= (decrypt ct key) pt))))
